@@ -2,12 +2,10 @@ import os
 import requests
 import json
 
-ollama_api_url = os.getenv("OLLAMA_API_URL", "http://100.99.72.98:11434/")
-
 
 class Chatbot:
 
-    def __init__(self, system_prompt, api_url="http://localhost:11434/", model="llama3",  temperature=0.9, seed=0, format=None):
+    def __init__(self, system_prompt, api_url, model="llama3", temperature=0.9, seed=0, format=None):
         self.model = model
         self.system_prompt = system_prompt
         self.api_url = api_url
@@ -37,7 +35,7 @@ class Chatbot:
         if self.format is not None:
             self.payload['format'] = self.format
 
-        api_endpoint = self.api_url + "api/generate"
+        api_endpoint = self.api_url + "/api/generate"
         self.api_response = requests.post(api_endpoint, json=self.payload, stream=False)
 
         # Check if the request was successful
@@ -62,7 +60,7 @@ class Chatbot:
 
         self.messages.append({"role": "user", "content": prompt})
         self.payload = {"model": self.model, "messages": self.messages}
-        api_endpoint = ollama_api_url + "api/chat"
+        api_endpoint = self.api_url + "/api/chat"
         self.api_response = requests.post(api_endpoint, json=self.payload, stream=True)
 
         # Check if the request was successful
