@@ -39,7 +39,6 @@ class Frontend:
             )
 
         else:
-            print(self.unlocked_levels)
             return "Incorrect!", gr.Dropdown(
                 choices=self.unlocked_levels,
                 value=self.current_level,
