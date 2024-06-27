@@ -10,10 +10,11 @@ def main(api_url, starting_level):
     with open("levels.json") as f:
         levels_json = json.load(f)
 
-    def load_level_1(query):
-        level_info = next(
-            (item for item in levels_json if item.get("level") == 1), None
-        )
+    def get_level_info(levels_json, level):
+        return next((item for item in levels_json if item.get("level") == level), None)
+
+    def load_level_1(query, level_info):
+
         secret_word = level_info["secret_word"]
 
         # Load bot
@@ -22,15 +23,14 @@ def main(api_url, starting_level):
                 guard_bot = Chatbot(
                     system_prompt=bot["system_prompt"].replace(
                         "{secret_word}", secret_word
-                    )
+                    ),
+                    api_url=api_url
                 )
 
         return guard_bot.generate_response(query)
     
-    def load_level_2(query):
-        level_info = next(
-            (item for item in levels_json if item.get("level") == 2), None
-        )
+    def load_level_2(query, level_info):
+
         secret_word = level_info["secret_word"]
 
         # Load bot
@@ -45,10 +45,8 @@ def main(api_url, starting_level):
 
         return guard_bot.generate_response(query)
 
-    def load_level_3(query):
-        level_info = next(
-            (item for item in levels_json if item.get("level") == 3), None
-        )
+    def load_level_3(query, level_info):
+
         secret_word = level_info["secret_word"]
 
         # Load bots
@@ -78,10 +76,8 @@ def main(api_url, starting_level):
             print("User query is valid...")
             return guard_bot.generate_response(query)
 
-    def load_level_4(query):
-        level_info = next(
-            (item for item in levels_json if item.get("level") == 4), None
-        )
+    def load_level_4(query, level_info):
+
         secret_word = level_info["secret_word"]
 
         # Load bots
@@ -135,17 +131,19 @@ def main(api_url, starting_level):
         print(f"Current level: {level}")
         print(f"User query: {query}")
 
+        level_info = get_level_info(levels_json, level)
+
         if level == 1:
-            return load_level_1(query)
+            return load_level_1(query, level_info)
 
         if level == 2:
-            return load_level_2(query)
+            return load_level_2(query, level_info)
 
         if level == 3:
-            return load_level_3(query)
+            return load_level_3(query, level_info)
         
         if level == 4:
-            return load_level_4(query)
+            return load_level_4(query, level_info)
 
     gui = Frontend(levels_json=levels_json, starting_level=int(starting_level))
     gui.launch(intercept_response, levels_json)
