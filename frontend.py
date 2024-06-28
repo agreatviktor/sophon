@@ -47,8 +47,13 @@ class Frontend:
                 info="Find the secret word to unlock more levels!",
                 interactive=True,
             )
-    def change_image(self, selected_level):
-        return gr.Image(value=f"images/level_avatars/sophon level {selected_level}.png", label="Sophon")
+    def change_image(self, selected_level, levels_json):
+        levels_data = json.loads(levels_json)
+        avatar_image_file_name = self.secret_word = next(
+            (item for item in levels_data if item.get("level") == self.current_level),
+            None,
+        )["avatar_image_file_name"]
+        return gr.Image(value=f"images/level_avatars/{avatar_image_file_name}", label="Sophon")
 
     def update_current_level(self, selected_level, levels_json):
         levels_data = json.loads(levels_json)
@@ -89,35 +94,40 @@ class Frontend:
 
                     query_input = gr.Textbox(label="Ask a question...")
                     send_button = gr.Button("Send")
-                    result_output = gr.Textbox(label="Bot Response")
+                    bot_response = gr.Textbox(label="Bot Response")
                     send_button.click(
                         fn=reply_function,
                         inputs=[query_input, level_dropdown],
-                        outputs=result_output,
+                        outputs=bot_response,
                     )
                     query_input.submit(
                         fn=reply_function,
                         inputs=[query_input, level_dropdown],
-                        outputs=result_output,
+                        outputs=bot_response,
                     )
                     with gr.Row():
                         secret_word_input = gr.Textbox(label="Enter the secret word")
-                    secret_word_input.submit(
-                        fn=self.check_word,
-                        inputs=secret_word_input,
-                        outputs=[result_output, level_dropdown],
-                    )
-                    check_button = gr.Button("Check secret word")
-                    check_button.click(
-                        fn=self.check_word,
-                        inputs=secret_word_input,
-                        outputs=[result_output, level_dropdown],
-                    ),
-                    result_output = gr.Textbox(label="Result")
-                avatar_image = gr.Image(value=f"images/level_avatars/sophon level {self.current_level}.png", label="Sophon")
+                        secret_word_output = gr.Textbox(label="Result")
+                        
+                        check_button = gr.Button("Check secret word")
+                        check_button.click(
+                            fn=self.check_word,
+                            inputs=secret_word_input,
+                            outputs=[secret_word_output, level_dropdown],
+                        )
+                        secret_word_input.submit(
+                                fn=self.check_word,
+                                inputs=secret_word_input,
+                                outputs=[secret_word_output, level_dropdown],
+                            )
+                avatar_image_file_name = self.secret_word = next(
+                        (item for item in levels_data if item.get("level") == self.current_level),
+                        None,
+                    )["avatar_image_file_name"]
+                avatar_image = gr.Image(value=f"images/level_avatars/{avatar_image_file_name}", label="Sophon")
                 level_dropdown.change(
                         fn=self.change_image,
-                        inputs=level_dropdown,
+                        inputs=[level_dropdown, levels_json_state],
                         outputs=[avatar_image],
                     ),
             

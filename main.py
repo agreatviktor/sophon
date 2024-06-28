@@ -24,7 +24,8 @@ def main(api_url, starting_level):
                     system_prompt=bot["system_prompt"].replace(
                         "{secret_word}", secret_word
                     ),
-                    api_url=api_url
+                    api_url=api_url,
+                    model=bot["model"]
                 )
 
         return guard_bot.generate_response(query)
@@ -40,7 +41,8 @@ def main(api_url, starting_level):
                     system_prompt=bot["system_prompt"].replace(
                         "{secret_word}", secret_word
                     ),
-                    api_url=api_url 
+                    api_url=api_url,
+                    model=bot["model"]
                 )
 
         return guard_bot.generate_response(query)
@@ -56,7 +58,8 @@ def main(api_url, starting_level):
                     system_prompt=bot["system_prompt"].replace(
                         "{secret_word}", secret_word
                     ),
-                    api_url=api_url
+                    api_url=api_url,
+                    model=bot["model"]
                 )
             if bot["role"] == "query_checker":
                 query_checker_bot = Chatbot(
@@ -64,7 +67,8 @@ def main(api_url, starting_level):
                         "{secret_word}", secret_word
                     ),
                     api_url=api_url,
-                    format="json"
+                    model=bot["model"],
+                    format="json",
                 )
 
         print("Checking if the query is asking for the password...")
@@ -87,7 +91,8 @@ def main(api_url, starting_level):
                     system_prompt=bot["system_prompt"].replace(
                         "{secret_word}", secret_word
                     ),
-                    api_url=api_url
+                    api_url=api_url,
+                    model=bot["model"]
                 )
             if bot["role"] == "query_checker":
                 query_checker_bot = Chatbot(
@@ -95,6 +100,7 @@ def main(api_url, starting_level):
                         "{secret_word}", secret_word
                     ),
                     api_url=api_url,
+                    model=bot["model"],
                     format="json"
                 )
             if bot["role"] == "response_checker":
@@ -103,6 +109,7 @@ def main(api_url, starting_level):
                         "{secret_word}", secret_word
                     ),
                     api_url=api_url,
+                    model=bot["model"],
                     format="json"
                 )
 
@@ -145,14 +152,14 @@ def main(api_url, starting_level):
         if level == 4:
             return load_level_4(query, level_info)
 
-    gui = Frontend(levels_json=levels_json, starting_level=int(starting_level))
+    gui = Frontend(levels_json=levels_json, starting_level=starting_level)
     gui.launch(intercept_response, levels_json)
 
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
     parser.add_argument('--api_url', type=str, default='http://localhost:11434', help='The API URL to be used (default: http://localhost:11434).')
-    parser.add_argument('--starting_level', type=str, default=1, help='The starting level (default: 1).')
+    parser.add_argument('--starting_level', type=int, default=1, help='The starting level (default: 1).')
     
     args = parser.parse_args()
     main(args.api_url, args.starting_level)
