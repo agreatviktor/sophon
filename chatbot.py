@@ -27,9 +27,11 @@ class Chatbot:
             "model": self.model,
             "system": self.system_prompt,
             "prompt": prompt,
-            "temperature": self.temperature,
-            "seed": self.seed,
             "stream": False,
+            "options": {
+                "temperature": self.temperature,
+                "seed": self.seed
+            }
         }
 
         if self.format is not None:
