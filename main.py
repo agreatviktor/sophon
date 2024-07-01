@@ -68,7 +68,7 @@ def main(api_url, starting_level):
             return level_4(query, level_info)
 
     gui = Frontend(levels_json=levels_json, starting_level=starting_level)
-    gui.launch(reply_function=intercept_response, levels_json=levels_json)
+    gui.launch(reply_function=intercept_response, levels_data=levels_json)
 
 
 if __name__ == "__main__":
