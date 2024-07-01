@@ -24,8 +24,10 @@ class Frontend:
         if starting_level > self.max_level:
             raise Exception("Starting level is greater than max level")
 
-    def check_word(self, word):
-        if word.upper() == self.secret_word.upper():
+    def check_word(self, guess):
+        print(f"User guessed: {guess}")
+        print(f"Secret word: {self.secret_word}")
+        if guess.upper() == self.secret_word.upper():
             if (
                 self.current_level == self.unlocked_levels[-1]
                 and self.current_level < self.max_level
@@ -49,7 +51,7 @@ class Frontend:
             )
     def change_image(self, selected_level, levels_json):
         levels_data = json.loads(levels_json)
-        avatar_image_file_name = self.secret_word = next(
+        avatar_image_file_name = next(
             (item for item in levels_data if item.get("level") == self.current_level),
             None,
         )["avatar_image_file_name"]
@@ -120,7 +122,7 @@ class Frontend:
                                 inputs=secret_word_input,
                                 outputs=[secret_word_output, level_dropdown],
                             )
-                avatar_image_file_name = self.secret_word = next(
+                avatar_image_file_name = next(
                         (item for item in levels_data if item.get("level") == self.current_level),
                         None,
                     )["avatar_image_file_name"]
