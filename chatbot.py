@@ -5,7 +5,7 @@ import json
 
 class Chatbot:
 
-    def __init__(self, system_prompt, api_url, model="llama3", temperature=0.9, seed=0, format=None):
+    def __init__(self, system_prompt, api_url, model="llama3.1", temperature=0.9, seed=0, format=None):
         self.model = model
         self.system_prompt = system_prompt
         self.api_url = api_url
