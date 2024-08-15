@@ -141,4 +141,4 @@ class Frontend:
                         </div>
                         """)
 
-        frontend.launch(allowed_paths=["images"])
+        frontend.launch(allowed_paths=["images"], server_name="0.0.0.0", server_port=7860)
