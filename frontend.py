@@ -49,7 +49,7 @@ class Frontend:
                 info="Find the secret word to unlock more levels!",
                 interactive=True,
             )
-    def change_image(self, selected_level, levels_json):
+    def change_image(self, levels_json):
         levels_data = json.loads(levels_json)
         avatar_image_file_name = next(
             (item for item in levels_data if item.get("level") == self.current_level),
@@ -65,6 +65,7 @@ class Frontend:
             (item for item in levels_data if item.get("level") == self.current_level),
             None,
         )["secret_word"]
+        print(f"Secret word: {self.secret_word}")
 
     def launch(self, reply_function, levels_data):
         self.secret_word = next(
@@ -129,7 +130,7 @@ class Frontend:
                 avatar_image = gr.Image(value=f"images/level_avatars/{avatar_image_file_name}", label="Sophon")
                 level_dropdown.change(
                         fn=self.change_image,
-                        inputs=[level_dropdown, levels_json_state],
+                        inputs=[levels_json_state],
                         outputs=[avatar_image],
                     ),
             

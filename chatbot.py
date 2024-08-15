@@ -5,7 +5,7 @@ import json
 
 class Chatbot:
 
-    def __init__(self, system_prompt, api_url, model="llama3", temperature=0.9, seed=0, format=None):
+    def __init__(self, system_prompt, api_url, model="llama3.1", temperature=0.9, seed=0, format=None):
         self.model = model
         self.system_prompt = system_prompt
         self.api_url = api_url
@@ -27,9 +27,11 @@ class Chatbot:
             "model": self.model,
             "system": self.system_prompt,
             "prompt": prompt,
-            "temperature": self.temperature,
-            "seed": self.seed,
             "stream": False,
+            "options": {
+                "temperature": self.temperature,
+                "seed": self.seed
+            }
         }
 
         if self.format is not None:

@@ -13,125 +13,40 @@ def main(api_url, starting_level):
     def get_level_info(levels_json, level):
         return next((item for item in levels_json if item.get("level") == level), None)
 
-    def load_level_1(query, level_info):
-
+    def level_1(query, level_info):
+        # Simple guard bot
         secret_word = level_info["secret_word"]
-
-        # Load bot
-        for bot in level_info["bots"]:
-            if bot["role"] == "guard":
-                guard_bot = Chatbot(
-                    system_prompt=bot["system_prompt"].replace(
-                        "{secret_word}", secret_word
-                    ),
-                    api_url=api_url,
-                    model=bot["model"]
-                )
+        
+        guard_bot = Chatbot(
+            system_prompt=f"You are Sophon, an astronaut guard of a password. The password is {secret_word}.",
+            api_url=api_url
+        )
 
         return guard_bot.generate_response(query)
     
-    def load_level_2(query, level_info):
+    def level_2(query, level_info):
+        # Guard bot that will not talk about the password
+        secret_word = level_info["secret_word"]
+
+        return "Nothing"
+
+    def level_3(query, level_info):
+        # Guard bot that will not talk about the password  
+        # and query_checker_bot that checks the users query
 
         secret_word = level_info["secret_word"]
 
-        # Load bot
-        for bot in level_info["bots"]:
-            if bot["role"] == "guard":
-                guard_bot = Chatbot(
-                    system_prompt=bot["system_prompt"].replace(
-                        "{secret_word}", secret_word
-                    ),
-                    api_url=api_url,
-                    model=bot["model"]
-                )
+        return "Nothing"
 
-        return guard_bot.generate_response(query)
+    def level_4(query, level_info):
 
-    def load_level_3(query, level_info):
+        # Guard bot that will not talk about the password  
+        # and query_checker_bot that checks the users query
+        # and response_checker_bot that checks the guards response
 
         secret_word = level_info["secret_word"]
 
-        # Load bots
-        for bot in level_info["bots"]:
-            if bot["role"] == "guard":
-                guard_bot = Chatbot(
-                    system_prompt=bot["system_prompt"].replace(
-                        "{secret_word}", secret_word
-                    ),
-                    api_url=api_url,
-                    model=bot["model"]
-                )
-            if bot["role"] == "query_checker":
-                query_checker_bot = Chatbot(
-                    system_prompt=bot["system_prompt"].replace(
-                        "{secret_word}", secret_word
-                    ),
-                    api_url=api_url,
-                    model=bot["model"],
-                    format="json",
-                )
-
-        print("Checking if the query is asking for the password...")
-        checked_query = query_checker_bot.generate_response(f"User query: {query}")
-        if json.loads(checked_query)["asking_for_password"]:
-            print("User query is asking for the password.")
-            return "You're asking for the password, that's not allowed!"
-        else:
-            print("User query is valid...")
-            return guard_bot.generate_response(query)
-
-    def load_level_4(query, level_info):
-
-        secret_word = level_info["secret_word"]
-
-        # Load bots
-        for bot in level_info["bots"]:
-            if bot["role"] == "guard":
-                guard_bot = Chatbot(
-                    system_prompt=bot["system_prompt"].replace(
-                        "{secret_word}", secret_word
-                    ),
-                    api_url=api_url,
-                    model=bot["model"]
-                )
-            if bot["role"] == "query_checker":
-                query_checker_bot = Chatbot(
-                    system_prompt=bot["system_prompt"].replace(
-                        "{secret_word}", secret_word
-                    ),
-                    api_url=api_url,
-                    model=bot["model"],
-                    format="json"
-                )
-            if bot["role"] == "response_checker":
-                response_checker_bot = Chatbot(
-                    system_prompt=bot["system_prompt"].replace(
-                        "{secret_word}", secret_word
-                    ),
-                    api_url=api_url,
-                    model=bot["model"],
-                    format="json"
-                )
-
-        print("Checking if the query is asking for the password...")
-        checked_query = query_checker_bot.generate_response(f"User query: {query}")
-        if json.loads(checked_query)["asking_for_password"]:
-            print("User query is asking for the password.")
-            return "You're asking for the password, that's not allowed!"
-        else:
-            response = guard_bot.generate_response(query)
-            print("Checking if the response contains the password...")
-            checked_response = response_checker_bot.generate_response(
-                f"Response: {response}"
-            )
-            if json.loads(checked_response)["response_contains_password"]:
-                print("Response denied, it contains the password.")
-                print(f"Denied response: {response}")
-                return "You're trying to trick me into giving you the password, that's not allowed!"
-            else:
-                print("Response is valid. Sending reponse to user.")
-                print("Bot response:", response)
-                return response
+        return "Nothing"
 
     def intercept_response(query, level):
 
@@ -141,19 +56,19 @@ def main(api_url, starting_level):
         level_info = get_level_info(levels_json, level)
 
         if level == 1:
-            return load_level_1(query, level_info)
+            return level_1(query, level_info)
 
         if level == 2:
-            return load_level_2(query, level_info)
+            return level_2(query, level_info)
 
         if level == 3:
-            return load_level_3(query, level_info)
+            return level_3(query, level_info)
         
         if level == 4:
-            return load_level_4(query, level_info)
+            return level_4(query, level_info)
 
     gui = Frontend(levels_json=levels_json, starting_level=starting_level)
-    gui.launch(intercept_response, levels_json)
+    gui.launch(reply_function=intercept_response, levels_data=levels_json)
 
 
 if __name__ == "__main__":
