@@ -5,6 +5,18 @@ Sophon is a game that takes inspiration from https://gandalf.lakera.ai/ (Gandalf
 # Installation
 
 ## Requirements
+**Git**
+
+Git is required to clone the repository. If you don't have Git installed, you can download it from: https://git-scm.com/downloads
+
+**Python**
+
+Python 3.7 or higher is required. You can download Python from: https://www.python.org/downloads/
+
+**Virtual Environment (venv)**
+
+It's recommended to use a virtual environment. Python 3.3+ comes with the venv module. If you're using an earlier version, you can install it with:
+
 
 **Ollama**
 
@@ -12,12 +24,29 @@ The default backend of Sophon is [Ollama](https://github.com/ollama/ollama), a s
 
 ## Installing Sophon
 
-Clone the repo:
+```
+python -m venv venv
+```
+
+2. Activate the virtual environment:
+
+- On Windows:
+```
+.\venv\Scripts\activate
+```
+
+- On macOS and Linux:
+```
+source venv/bin/activate
+```
+
+3. Clone the repo:
+
 ```
 git clone https://github.com/agreatviktor/sophon.git
 ```
 
-Install dependencies, preferably in an environment manager like [venv](https://docs.python.org/3/library/venv.html) or [conda](https://conda.io/projects/conda/en/latest/user-guide/install/index.html):
+Install dependencies:
 ```
 pip install -r requirements.txt
 ```
@@ -27,12 +56,12 @@ Run the application:
 python main.py
 ```
 
-The default api_url for Ollama is http://localhost:11434, but you can change this by passing --api_url to main.py like this:
+The default api_url for Ollama is http://localhost:11434, but you can change this by passing --api-url to main.py like this:
 ```
-python main.py --api_url=http://my-server:11434
+python main.py --api-url=http://my-server:11434
 ```
 
-You can also launch the application at a specified starting level using --starting_level, for example to start at level 2:
+You can also launch the application at a specified starting level using --starting-level, for example to start at level 2:
 ```
-python main.py --starting_level=2
+python main.py --starting-level=2
 ```

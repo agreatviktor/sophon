@@ -73,8 +73,8 @@ def main(api_url, starting_level):
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
-    parser.add_argument('--api_url', type=str, default='http://localhost:11434', help='The API URL to be used (default: http://localhost:11434).')
-    parser.add_argument('--starting_level', type=int, default=1, help='The starting level (default: 1).')
+    parser.add_argument('--api-url', type=str, default='http://localhost:11434', help='The API URL to be used (default: http://localhost:11434).')
+    parser.add_argument('--starting-level', type=int, default=1, help='The starting level (default: 1).')
     
     args = parser.parse_args()
     main(args.api_url, args.starting_level)
