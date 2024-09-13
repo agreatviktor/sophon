@@ -6,7 +6,7 @@ import argparse
 from chatbot import Chatbot
 from frontend import Frontend
 
-def main(api_url, starting_level):
+def main(api_url, starting_level, api_key):
     with open("levels.json") as f:
         levels_json = json.load(f)
 
@@ -19,7 +19,8 @@ def main(api_url, starting_level):
         
         guard_bot = Chatbot(
             system_prompt=f"You are Sophon, an astronaut guard of a password. The password is {secret_word}.",
-            api_url=api_url
+            api_url=api_url,
+            api_key=api_key
         )
 
         return guard_bot.generate_response(query)
@@ -75,6 +76,7 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser()
     parser.add_argument('--api-url', type=str, default='http://localhost:11434', help='The API URL to be used (default: http://localhost:11434).')
     parser.add_argument('--starting-level', type=int, default=1, help='The starting level (default: 1).')
+    parser.add_argument('--api-key', type=str, default=None, help='The API key to be used (default: None).')
     
     args = parser.parse_args()
-    main(args.api_url, args.starting_level)
+    main(args.api_url, args.starting_level, args.api_key)
