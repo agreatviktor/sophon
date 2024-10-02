@@ -46,14 +46,14 @@ source venv/bin/activate
 git clone https://github.com/agreatviktor/sophon.git
 ```
 
-Change the branch to workshop
-```
-git checkout workshop
-```
-
 Change the folder
 ```
 cd sophon
+```
+
+Change the branch to workshop
+```
+git checkout workshop
 ```
 
 Install dependencies:
