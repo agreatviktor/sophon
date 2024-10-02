@@ -46,6 +46,16 @@ source venv/bin/activate
 git clone https://github.com/agreatviktor/sophon.git
 ```
 
+Change the branch to workshop
+```
+git checkout workshop
+```
+
+Change the folder
+```
+cd sophon
+```
+
 Install dependencies:
 ```
 pip install -r requirements.txt
